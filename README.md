@@ -1,11 +1,6 @@
 # 交差結合
 
 # 内部結合
-## 平均より高い
-```
-select * from products_tbl WHERE prd_price > (SELECT AVG(prd_price) FROM products_tbl)
-```
-
 ## 購買明細を「顧客名・購入日時・商品名・数量」で一覧
 ```
 SELECT CONCAT(c.cst_lastname, ' ', c.cst_firstname) AS 顧客名,
@@ -31,6 +26,12 @@ WHERE d.dtl_shp_id = (
   LIMIT 1
 );
 ```
+
+## 平均より高い
+```
+select * from products_tbl WHERE prd_price > (SELECT AVG(prd_price) FROM products_tbl)
+```
+
 
 # 集約関数
 ## 顧客ごとの購入回数
