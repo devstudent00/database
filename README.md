@@ -47,6 +47,16 @@ FROM details_tbl
 GROUP BY dtl_prd_id;
 ```
 
+## 商品ごとの売上金額
+```
+SELECT
+  p.prd_name,
+  SUM(d.dtl_cnt * p.prd_price) AS total_sales
+FROM details_tbl d
+INNER JOIN products_tbl p
+ON d.dtl_prd_id = p.prd_id
+GROUP BY p.prd_name;
+```
 
 
 # 集約関数
