@@ -1,5 +1,14 @@
-## 購買明細を「顧客名・購入日時・商品名・数量」で一覧（内部結合、カラム別名、関数）
+## 都道府県の個数（集約関数）
+```sql
+SELECT
+  cst_address,
+  COUNT(*)
+FROM customers_tbl
+GROUP BY cst_address;
 ```
+
+## 購買明細を「顧客名・購入日時・商品名・数量」で一覧（内部結合、カラム別名、関数）
+```sql
 SELECT CONCAT(c.cst_lastname, ' ', c.cst_firstname) AS 顧客名,
        s.shp_date AS 購買日時,
        p.prd_name AS 商品名,
@@ -11,8 +20,8 @@ JOIN products_tbl p ON d.dtl_prd_id = p.prd_id
 ```
 
 ## 最新購買（副お問い合わせ、ソート、件数制限）
-```
-SELECT d.*
+```sql
+SELECT *
 FROM details_tbl d
 WHERE d.dtl_shp_id = (
   SELECT s.shp_id
@@ -23,27 +32,27 @@ WHERE d.dtl_shp_id = (
 ```
 
 ## 平均より高い（関数、条件）
-```
+```sql
 select * from products_tbl WHERE prd_price > (SELECT AVG(prd_price) FROM products_tbl)
 ```
 
 
 ## 顧客ごとの購入回数（カラム別名、関数、集約関数）
-```
+```sql
 SELECT shp_cst_id, COUNT(*) AS 購入回数
 FROM shopping_tbl
 GROUP BY shp_cst_id;
 ```
 
 ## 商品ごとの販売数量（カラム別名、集約関数）
-```
+```sql
 SELECT dtl_prd_id, SUM(dtl_cnt) AS total_cnt
 FROM details_tbl
 GROUP BY dtl_prd_id;
 ```
 
 ## 商品ごとの売上金額（カラム別名、関数、内部結合、集約関数）
-```
+```sql
 SELECT
   p.prd_name,
   SUM(d.dtl_cnt * p.prd_price) AS total_sales
@@ -55,7 +64,7 @@ GROUP BY p.prd_name;
 
 
 ## 総額5000円以上（カラム別名、内部結合、集約関数）
-```
+```sql
 SELECT s.shp_id,
        s.shp_date,
        SUM(p.prd_price * d.dtl_cnt) AS 総額
@@ -68,7 +77,7 @@ ORDER BY 総額 DESC;
 ```
 
 ## 顧客別の購入回数（関数、内部結合、集約関数）
-```
+```sql
 SELECT c.cst_id,
        CONCAT(c.cst_lastname, ' ', c.cst_firstname) AS 顧客名,
        COUNT(*) AS 購買回数
@@ -79,7 +88,7 @@ ORDER BY 購買回数 DESC;
 ```
 
 ## 商品別の総販売数（内部結合、集約関数、ソート）
-```
+```sql
 SELECT p.prd_name AS 商品名,
        SUM(d.dtl_cnt) AS 総数量
 FROM details_tbl d
