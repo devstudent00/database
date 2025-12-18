@@ -1,3 +1,18 @@
+# databse
+* ※chatgptが考えた問題
+
+## 購入履歴が無い（内部結合、副お問い合わせ）
+* ある場合は、WHERE EXISTS
+```sql
+SELECT *
+FROM customers_tbl c
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM shopping_tbl s
+  WHERE s.shp_cst_id = c.cst_id
+);
+```
+
 ## 都道府県の個数（集約関数）
 ```sql
 SELECT
@@ -23,11 +38,10 @@ JOIN products_tbl p ON d.dtl_prd_id = p.prd_id
 ```sql
 SELECT *
 FROM details_tbl d
-WHERE d.dtl_shp_id = (
-  SELECT s.shp_id
-  FROM shopping_tbl s
-  ORDER BY s.shp_date DESC
-  LIMIT 1
+JOIN shopping_tbl s ON d.dtl_shp_id = s.shp_id
+WHERE s.shp_date = (
+  SELECT MAX(shp_date)
+  FROM shopping_tbl
 );
 ```
 
