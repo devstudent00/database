@@ -1,9 +1,13 @@
 # databse
 * ※chatgptが考えた問題
 
-## 
+## テーブル内の都道府県の個数（関数、カラム別名）
+```sql
+SELECT COUNT(DISTINCT cst_address) AS 都道府県の種類数
+FROM customers_tbl;
+```
 
-## 購入履歴が無い（内部結合、副お問い合わせ）
+## 購入履歴が無い（外部結合、副お問い合わせ）
 * ある場合は、WHERE EXISTS
 ```sql
 SELECT c.cst_id, c.cst_lastname, c.cst_firstname, s.shp_id
@@ -22,7 +26,7 @@ WHERE NOT EXISTS (
 );
 ```
 
-## 都道府県の個数（集約関数）
+## 顧客別の都道府県の個数（集約関数）
 ```sql
 SELECT
   cst_address,
@@ -74,15 +78,17 @@ FROM details_tbl
 GROUP BY dtl_prd_id;
 ```
 
-## 商品ごとの売上金額（カラム別名、関数、内部結合、集約関数）
+## 商品ごとの売上金額（カラム別名、関数、内部結合、集約関数、ソート、件数制限）
 ```sql
 SELECT
   p.prd_name,
-  SUM(d.dtl_cnt * p.prd_price) AS total_sales
+  SUM(d.dtl_cnt * p.prd_price) AS 売上
 FROM details_tbl d
 INNER JOIN products_tbl p
 ON d.dtl_prd_id = p.prd_id
-GROUP BY p.prd_name;
+GROUP BY p.prd_name
+ORDER BY 売上 DESC
+LIMIT 3;
 ```
 
 
