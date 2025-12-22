@@ -1,8 +1,17 @@
 # databse
 * ※chatgptが考えた問題
 
+## 
+
 ## 購入履歴が無い（内部結合、副お問い合わせ）
 * ある場合は、WHERE EXISTS
+```sql
+SELECT c.cst_id, c.cst_lastname, c.cst_firstname, s.shp_id
+FROM customers_tbl c
+LEFT OUTER JOIN shopping_tbl s
+  ON c.cst_id = s.shp_cst_id;
+```
+
 ```sql
 SELECT *
 FROM customers_tbl c
@@ -24,14 +33,14 @@ GROUP BY cst_address;
 
 ## 購買明細を「顧客名・購入日時・商品名・数量」で一覧（内部結合、カラム別名、関数）
 ```sql
-SELECT CONCAT(c.cst_lastname, ' ', c.cst_firstname) AS 顧客名,
+SELECT cst_id, CONCAT(c.cst_lastname, ' ', c.cst_firstname) AS 顧客名,
        s.shp_date AS 購買日時,
        p.prd_name AS 商品名,
        d.dtl_cnt  AS 数量
 FROM details_tbl d
 JOIN shopping_tbl s ON d.dtl_shp_id = s.shp_id
 JOIN customers_tbl c ON s.shp_cst_id = c.cst_id
-JOIN products_tbl p ON d.dtl_prd_id = p.prd_id
+JOIN products_tbl p ON d.dtl_prd_id = p.prd_id order by cst_id asc;
 ```
 
 ## 最新購買（副お問い合わせ、ソート、件数制限）
